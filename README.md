@@ -1,4 +1,4 @@
-#<img width="30" height="30" alt="icon" src="https://github.com/user-attachments/assets/dc7da4a4-a225-4761-b78c-f480a7bfae55" /> Stack Overflow Mentor - Chrome Extension 
+# <img width="30" height="30" alt="icon" src="https://github.com/user-attachments/assets/dc7da4a4-a225-4761-b78c-f480a7bfae55" /> Stack Overflow Mentor - Chrome Extension 
 
  
 
