@@ -1,8 +1,18 @@
 import express from 'express';
 import { analyzeQuestion } from './analyzer';
+import cors from 'cors'; // Add this
+
 
 const app = express();
 const PORT = 3000;
+
+app.use(cors({
+  origin: '*',
+  methods: ['POST'],
+  allowedHeaders: ['Content-Type', 'Extension-ID']
+}));
+
+
 
 app.use(express.json());
 

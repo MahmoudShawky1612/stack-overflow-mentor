@@ -14,25 +14,31 @@ classifier.train();
 export async function analyzeQuestion(body: string) {
   const suggestions: string[] = [];
   
-  // 1. Check for vague language in body only
-  const bodyVague = classifier.classify(body) === 'vague';
-  if (bodyVague) {
+  // 1. Vague language detection (more robust)
+  const vaguePhrases = ["doesn't work", "not working", "something wrong", "help me"];
+  const isVague = vaguePhrases.some(phrase => 
+    body.toLowerCase().includes(phrase)
+  );
+  
+  if (isVague) {
     suggestions.push('Try to be more specific about the problem');
   }
 
-  // 2. Check for code snippets in body
-  const hasCode = body.includes('```') || /<code>/.test(body);
+  // 2. Code detection (more reliable)
+  const hasCode = body.includes('```') || 
+                  /<code>/.test(body) || 
+                  /function\s+\w+\(/.test(body) || 
+                  /def\s+\w+\(/.test(body);
+                  
   if (!hasCode) {
     suggestions.push('Consider adding a code example');
   }
 
-  // 3. Check body length only
-  if (body.length < 100) {
+  // 3. Body length check
+  if (body.length < 50) {
     suggestions.push('Add more details about what you\'ve tried');
   }
 
-  // 4. Skip duplicate search (not requested)
-  
   return {
     suggestions,
     qualityScore: calculateQualityScore(body, suggestions.length),

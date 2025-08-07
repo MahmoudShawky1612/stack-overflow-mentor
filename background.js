@@ -1,22 +1,35 @@
-// Only analyze the body, not the title
+// Get extension ID dynamically
+const extensionId = chrome.runtime.id;
+const backendUrl = `http://localhost:3000/analyze`;
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'QUESTION_UPDATE') {
-    // Only send body to backend (title not used)
-    fetch('http://localhost:3000/analyze', {
+    console.log('Sending to backend:', message.data.body.substring(0, 50));
+    
+    fetch(backendUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Extension-ID': extensionId
+      },
       body: JSON.stringify({ body: message.data.body })
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    })
     .then(data => {
-      console.log('Analysis results:', data);
+      console.log('Analysis success:', data);
       sendResponse(data);
     })
     .catch(error => {
-      console.error('Analysis error:', error);
-      sendResponse({ suggestions: [], duplicates: [] });
+      console.error('Fetch error:', error);
+      sendResponse({ 
+        suggestions: [`Backend connection failed: ${error.message}`],
+        qualityScore: 0
+      });
     });
     
-    return true; // Keep message channel open
+    return true;
   }
 });

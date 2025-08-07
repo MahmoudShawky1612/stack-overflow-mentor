@@ -6,8 +6,12 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
   
   // Wait for fields to load
   setTimeout(() => {
-    // Focus only on the body field
-    const bodyField = document.querySelector('.js-editable, .wmd-input, [aria-label="Body"]');
+    // Try these selectors in order
+const bodyField = 
+  document.querySelector('.js-editable') || // New editor
+  document.querySelector('.wmd-input') ||    // Old editor
+  document.querySelector('[aria-label="Body"]') ||
+  document.querySelector('#wmd-input');
     
     if (bodyField) {
       console.log("Body element found:", bodyField);
@@ -41,14 +45,18 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
           body: bodyField.textContent
         };
         
-        chrome.runtime.sendMessage(
-          { type: 'QUESTION_UPDATE', data: questionData },
-          (response) => {
-            console.log("Analysis received:", response);
-            currentAnalysis = response;
-            updateIndicatorUI(response);
-          }
-        );
+chrome.runtime.sendMessage(
+  { type: 'QUESTION_UPDATE', data: questionData },
+  (response) => {
+    if (chrome.runtime.lastError) {
+      console.error('Message error:', chrome.runtime.lastError);
+      return;
+    }
+    console.log("Analysis received:", response);
+    currentAnalysis = response;
+    updateIndicatorUI(response);
+  }
+);
       };
 
       bodyField.addEventListener('input', handleInput);
