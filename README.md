@@ -82,6 +82,11 @@ Stack Overflow API ← Duplicate Detection ← Redis Cache Check
    npm run build
    npm start
    ```
+   
+4. **Or use docker directly:**
+   ```bash
+   docker compose up
+   ```
 
 5. **Load the Chrome extension:**
    - Open Chrome and go to `chrome://extensions`
