@@ -9,6 +9,9 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
     // Focus only on the body field
     const bodyField = document.querySelector('.js-editable, .wmd-input, [aria-label="Body"]');
     
+
+
+    
     if (bodyField) {
       console.log("Body element found:", bodyField);
       
@@ -169,8 +172,10 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
         });
       }
       
+      
       // Setup event listeners
       bodyField.addEventListener('input', handleInput);
+
       
     } else {
       console.error("Body field not found");

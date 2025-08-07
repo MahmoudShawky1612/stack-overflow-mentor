@@ -9,7 +9,7 @@ classifier.addDocument('help me fix this', 'vague');
 classifier.addDocument('getting error 404', 'specific');
 classifier.train();
 
-export async function analyzeQuestion(body: string) {
+export async function analyzeQuestion(body: string, title: string) {
   const suggestions: string[] = [];
   
   // 1. Vague language detection (more robust)
@@ -37,9 +37,14 @@ export async function analyzeQuestion(body: string) {
     suggestions.push('Add more details about what you\'ve tried');
   }
 
-  return {
+  // 4. Stack Overflow duplicates
+  const duplicates = await findDuplicates(title);
+
+
+   return {
     suggestions,
     qualityScore: calculateQualityScore(body, suggestions.length),
+    duplicates
   };
 }
 
