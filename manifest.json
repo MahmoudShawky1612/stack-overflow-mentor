@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Stack Overflow Mentor",
   "version": "1.0",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "storage"],
   "host_permissions": ["*://*.stackoverflow.com/*"],
   "background": {
     "service_worker": "background.js"

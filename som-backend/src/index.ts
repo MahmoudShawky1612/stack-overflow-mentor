@@ -9,7 +9,7 @@ app.use(express.json());
 app.post('/analyze', async (req, res) => {
   try {
     const { title, body } = req.body;
-    const analysis = await analyzeQuestion(title, body);
+    const analysis = await analyzeQuestion(body);
     res.json(analysis);
   } catch (error) {
     res.status(500).json({ error: 'Analysis failed' });
