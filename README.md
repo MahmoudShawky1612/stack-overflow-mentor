@@ -1,6 +1,6 @@
-# Stack Overflow Mentor - Chrome Extension
+# Stack Overflow Mentor - Chrome Extension <img width="2048" height="2048" alt="icon" src="https://github.com/user-attachments/assets/dc7da4a4-a225-4761-b78c-f480a7bfae55" />
 
-![Demo](https://demo.gif)
+ 
 
 ## Overview
 
