@@ -85,6 +85,7 @@ Stack Overflow API ← Duplicate Detection ← Redis Cache Check
    
 4. **Or use docker directly:**
    ```bash
+   cd som-backend
    docker compose up --build
    ```
 
