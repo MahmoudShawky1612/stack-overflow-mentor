@@ -18,13 +18,5 @@ Non-Intrusive Interface: Suggestions appear in a sidebar without blocking your c
 Performance Optimized: Redis caching and throttled API calls ensure smooth performance
 
 How It Works
-graph TD
-    A[Chrome Extension] -->|User types question| B(Content Script)
-    B -->|Sends question data| C(Background Service)
-    C -->|POST request| D[Node.js Backend]
-    D -->|NLP Analysis| E[Natural Language Processing]
-    D -->|Duplicate Check| F[Stack Overflow API]
-    D -->|Cache Results| G[Redis Cache]
-    D --> C
-    C -->|Sends suggestions| B
-    B -->|Updates UI| H[User Interface]
+
+<img width="2166" height="1818" alt="DeepSeek Project Ideas Aug 2025" src="https://github.com/user-attachments/assets/d70282a1-0993-46e0-a92e-b1815eb35b89" />
