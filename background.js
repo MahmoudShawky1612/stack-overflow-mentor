@@ -1,5 +1,4 @@
-// Get extension ID dynamically
-const extensionId = chrome.runtime.id;
+ const extensionId = chrome.runtime.id;
 const backendUrl = `http://localhost:3000/analyze`;
 
  

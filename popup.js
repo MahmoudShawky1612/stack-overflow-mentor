@@ -6,15 +6,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 function updateUI(analysis) {
-  // Update quality score
-  document.getElementById('score-text').textContent = 
+   document.getElementById('score-text').textContent = 
     `Quality Score: ${analysis.qualityScore}/100`;
     
   document.getElementById('quality-fill').style.width = 
     `${analysis.qualityScore}%`;
   
-  // Update suggestions
-  const suggestionsContainer = document.getElementById('suggestions-container');
+   const suggestionsContainer = document.getElementById('suggestions-container');
   suggestionsContainer.innerHTML = '<h3>Suggestions:</h3>';
   
   if (analysis.suggestions.length === 0) {
@@ -29,8 +27,7 @@ function updateUI(analysis) {
     });
   }
   
-  // Update duplicates
-  const duplicatesContainer = document.getElementById('duplicates-container');
+   const duplicatesContainer = document.getElementById('duplicates-container');
   const duplicatesList = document.getElementById('duplicates-list');
   duplicatesList.innerHTML = '';
   
@@ -49,8 +46,7 @@ function updateUI(analysis) {
   }
 }
 
-// Request current analysis when popup opens
-window.addEventListener('DOMContentLoaded', () => {
+ window.addEventListener('DOMContentLoaded', () => {
   chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, {type: 'REQUEST_ANALYSIS'});
   });

@@ -1,13 +1,10 @@
 console.log("Content script loaded");
 
-// Detect Stack Overflow question page
-if (window.location.href.includes('stackoverflow.com/questions/')) {
+ if (window.location.href.includes('stackoverflow.com/questions/')) {
   console.log("Detected Stack Overflow question page");
   
-  // Wait for fields to load
-  setTimeout(() => {
-    // Focus only on the body field
-    const bodyField = document.querySelector('.js-editable, .wmd-input, [aria-label="Body"]');
+   setTimeout(() => {
+     const bodyField = document.querySelector('.js-editable, .wmd-input, [aria-label="Body"]');
         const titleField = document.querySelector('input#title');
 
 
@@ -17,8 +14,7 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
       console.log("Body element found:", bodyField);
       console.log("Title element found:", titleField);
 
-      // Create suggestions sidebar container
-      const sidebar = document.createElement('div');
+       const sidebar = document.createElement('div');
       sidebar.id = 'som-suggestions-sidebar';
       sidebar.style.position = 'fixed';
       sidebar.style.right = '20px';
@@ -34,8 +30,7 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
       sidebar.style.maxHeight = 'calc(100vh - 150px)';
       sidebar.style.overflow = 'hidden';
       
-      // Create sidebar header
-      const header = document.createElement('div');
+       const header = document.createElement('div');
       header.style.backgroundColor = '#f48024';
       header.style.color = 'white';
       header.style.padding = '12px 16px';
@@ -60,15 +55,13 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
       header.appendChild(qualityScore);
       sidebar.appendChild(header);
       
-      // Create suggestions container
-      const suggestionsContainer = document.createElement('div');
+       const suggestionsContainer = document.createElement('div');
       suggestionsContainer.id = 'som-suggestions-container';
       suggestionsContainer.style.padding = '15px';
       suggestionsContainer.style.flex = '1';
       suggestionsContainer.style.overflowY = 'auto';
       
-      // Create initial message
-      const initialMessage = document.createElement('div');
+       const initialMessage = document.createElement('div');
       initialMessage.textContent = 'Start typing to get suggestions...';
       initialMessage.style.color = '#6a737c';
       initialMessage.style.textAlign = 'center';
@@ -78,11 +71,9 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
       suggestionsContainer.appendChild(initialMessage);
       sidebar.appendChild(suggestionsContainer);
       
-      // Add to document
-      document.body.appendChild(sidebar);
+       document.body.appendChild(sidebar);
       
-      // Close button
-      const closeBtn = document.createElement('button');
+       const closeBtn = document.createElement('button');
       closeBtn.textContent = '×';
       closeBtn.style.position = 'absolute';
       closeBtn.style.right = '10px';
@@ -98,11 +89,9 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
       let currentAnalysis = null;
       let lastUpdateTime = 0;
       
-      // Debounced input handler
-      const handleInput = () => {
+       const handleInput = () => {
         const now = Date.now();
-        // Throttle updates to once per second
-        if (now - lastUpdateTime < 1000) return;
+         if (now - lastUpdateTime < 1000) return;
         lastUpdateTime = now;
         
         const questionData = {
@@ -110,8 +99,7 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
           body: bodyField.textContent
         };
         
-        // Show loading state
-        suggestionsContainer.innerHTML = '';
+         suggestionsContainer.innerHTML = '';
         const loading = document.createElement('div');
         loading.textContent = 'Analyzing your question...';
         loading.style.color = '#6a737c';
@@ -129,8 +117,7 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
         );
       };
       
-      // Update the UI with all suggestions
-   function updateSuggestionsUI(analysis) {
+    function updateSuggestionsUI(analysis) {
         suggestionsContainer.innerHTML = '';
         
         // Update quality score
@@ -220,8 +207,7 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
         dupItem.style.textDecoration = 'none';
         dupItem.style.color = '#2c5777';
         
-        // Create title with overflow handling
-        const title = document.createElement('div');
+         const title = document.createElement('div');
         title.textContent = dup.title;
         title.style.fontWeight = '500';
         title.style.fontSize = '13px';
@@ -232,8 +218,7 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
         title.style.webkitLineClamp = '2';
         title.style.webkitBoxOrient = 'vertical';
         
-        // Create metadata row
-        const metaRow = document.createElement('div');
+         const metaRow = document.createElement('div');
         metaRow.style.display = 'flex';
         metaRow.style.gap = '10px';
         metaRow.style.fontSize = '12px';
@@ -259,8 +244,7 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
       }
       
       
-      // Setup event listeners
-      bodyField.addEventListener('input', handleInput);
+       bodyField.addEventListener('input', handleInput);
       titleField.addEventListener('input', handleInput);
 
       
