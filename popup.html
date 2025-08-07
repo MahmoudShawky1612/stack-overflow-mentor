@@ -1,7 +1,198 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stack Overflow Mentor</title>
+  <style>
+
+ 
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #f8f9f9;
+      color: #333;
+      padding: 20px;
+    }
+
+    .container {
+      width : 1000px;
+      margin: auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      color: #f48024;
+      font-size: 2rem;
+    }
+
+    header p {
+      color: #6a737c;
+    }
+
+    .main {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .editor, .sidebar {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+
+    .editor {
+      flex: 2;
+      min-width: 300px;
+    }
+
+    .editor h2 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .editor[contenteditable] {
+      min-height: 300px;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+
+    .sidebar {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .sidebar h3 {
+      color: #f48024;
+      margin-bottom: 15px;
+    }
+
+    .suggestion {
+      border-left: 4px solid #f48024;
+      background: #f1f2f3;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+    }
+
+    .suggestion strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .example {
+      background: #e1ecf4;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      margin-top: 20px;
+      border: 1px solid #c8e1ff;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-top: 40px;
+    }
+
+    .feature {
+      background: #fff;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .feature h4 {
+      color: #f48024;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .main {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
 <body>
-  <h1>🦸 Stack Overflow Mentor</h1>
-  <p>I'll help you write better questions!</p>
+  <div class="container">
+    <header>
+      <h1>Stack Overflow Mentor</h1>
+      <p>Get smart suggestions while writing your question. Improve clarity and increase your chances of getting answers.</p>
+    </header>
+
+    <div class="main">
+      <div class="editor">
+        <h2>Question Editor</h2>
+        <div contenteditable="true">
+          <h3>How to fix JavaScript fetch error?</h3>
+          <p>I’m trying to fetch data from an API but it doesn't work. Can someone help?</p>
+          <pre><code>fetch('https://api.example.com/data')
+  .then(data => console.log(data))</code></pre>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <h3>Suggestions</h3>
+
+        <div class="suggestion">
+          <strong>⚠️ Avoid vague language</strong>
+          Describe the exact error message you're seeing.
+        </div>
+
+        <div class="suggestion">
+          <strong>💡 Add more details</strong>
+          Explain what you've tried and where you're stuck.
+        </div>
+
+        <div class="suggestion">
+          <strong>🔍 Fix syntax error</strong>
+          You're missing a closing parenthesis in your `fetch()` call.
+        </div>
+
+        <div class="suggestion">
+          <strong>📚 Add error handling</strong>
+          Use `.catch()` to display error messages.
+        </div>
+
+        <div class="example">
+I'm getting a 404 error using fetch:
+fetch('https://api.example.com/data')
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.error('Error:', err));
+        </div>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <h4>🚀 Clean Suggestions</h4>
+        Sidebar feedback that doesn’t block your typing.
+      </div>
+      <div class="feature">
+        <h4>💡 Helpful Tips</h4>
+        Clear explanations to improve your question.
+      </div>
+      <div class="feature">
+        <h4>🎯 Context Aware</h4>
+        Feedback updates as you write.
+      </div>
+      <div class="feature">
+        <h4>📊 Quality Score</h4>
+        Measure your question’s clarity and completeness.
+      </div>
+    </div>
+  </div>
 </body>
 </html>

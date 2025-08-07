@@ -1,0 +1,23 @@
+# Ignore node modules on host (will be installed in container)
+node_modules
+
+# Ignore compiled code on host (container will build its own)
+dist
+
+# Git
+.git
+.gitignore
+
+# Logs
+*.log
+logs/
+
+# OS junk
+.DS_Store
+
+# Local env
+.env
+
+# Editor junk
+.vscode
+.idea
