@@ -85,7 +85,7 @@ Stack Overflow API ← Duplicate Detection ← Redis Cache Check
    
 4. **Or use docker directly:**
    ```bash
-   docker compose up
+   docker compose up --build
    ```
 
 5. **Load the Chrome extension:**
