@@ -1,19 +1,16 @@
 // background.js
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'QUESTION_UPDATE') {
-    console.log('Received question update:', message.data);
-    
-    // TODO: Send to backend API
-    // For now, mock a response
-    const mockResponse = {
-      suggestions: [
-        "Add error messages or logs",
-        "Consider adding code formatting"
-      ],
-      score: 65
-    };
-    
-    sendResponse(mockResponse);
+    fetch('http://localhost:3000/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(message.data)
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Analysis results:', data);
+      sendResponse(data);
+    });
+    return true; // Keep message channel open
   }
-  return true; // Keep message channel open
 });
