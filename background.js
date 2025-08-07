@@ -2,9 +2,13 @@
 const extensionId = chrome.runtime.id;
 const backendUrl = `http://localhost:3000/analyze`;
 
+ 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'QUESTION_UPDATE') {
-    console.log('Sending to backend:', message.data.body.substring(0, 50));
+    console.log('Sending to backend:', {
+      title: message.data.title.substring(0, 50),
+      body: message.data.body.substring(0, 50)
+    });
     
     fetch(backendUrl, {
       method: 'POST',
@@ -12,7 +16,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         'Content-Type': 'application/json',
         'Extension-ID': extensionId
       },
-      body: JSON.stringify({ body: message.data.body })
+      body: JSON.stringify({ 
+        title: message.data.title,
+        body: message.data.body
+      })
     })
     .then(response => {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -26,7 +33,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       console.error('Fetch error:', error);
       sendResponse({ 
         suggestions: [`Backend connection failed: ${error.message}`],
-        qualityScore: 0
+        qualityScore: 0,
+        duplicates: []
       });
     });
     

@@ -8,13 +8,15 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
   setTimeout(() => {
     // Focus only on the body field
     const bodyField = document.querySelector('.js-editable, .wmd-input, [aria-label="Body"]');
-    
+        const titleField = document.querySelector('input#title');
 
 
+
     
-    if (bodyField) {
+    if (bodyField && titleField) {
       console.log("Body element found:", bodyField);
-      
+      console.log("Title element found:", titleField);
+
       // Create suggestions sidebar container
       const sidebar = document.createElement('div');
       sidebar.id = 'som-suggestions-sidebar';
@@ -104,6 +106,7 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
         lastUpdateTime = now;
         
         const questionData = {
+          title: titleField.value,
           body: bodyField.textContent
         };
         
@@ -127,7 +130,7 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
       };
       
       // Update the UI with all suggestions
-      function updateSuggestionsUI(analysis) {
+   function updateSuggestionsUI(analysis) {
         suggestionsContainer.innerHTML = '';
         
         // Update quality score
@@ -135,7 +138,10 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
           qualityScore.textContent = `Quality: ${analysis.qualityScore}/100`;
         }
         
-        if (!analysis.suggestions || analysis.suggestions.length === 0) {
+        const hasSuggestions = analysis.suggestions && analysis.suggestions.length > 0;
+        const hasDuplicates = analysis.duplicates && analysis.duplicates.length > 0;
+        
+        if (!hasSuggestions && !hasDuplicates) {
           const noSuggestions = document.createElement('div');
           noSuggestions.textContent = '✅ Your question looks great! Keep writing...';
           noSuggestions.style.color = '#3c4146';
@@ -145,36 +151,117 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
           return;
         }
         
-        // Create suggestion items
-        analysis.suggestions.forEach(suggestion => {
-          const suggestionItem = document.createElement('div');
-          suggestionItem.style.padding = '12px';
-          suggestionItem.style.marginBottom = '10px';
-          suggestionItem.style.backgroundColor = '#f8f9f9';
-          suggestionItem.style.borderRadius = '6px';
-          suggestionItem.style.borderLeft = '4px solid #f48024';
-          suggestionItem.style.display = 'flex';
-          suggestionItem.style.gap = '10px';
+        // Display suggestions
+        if (hasSuggestions) {
+          analysis.suggestions.forEach(suggestion => {
+            const suggestionItem = createSuggestionItem(suggestion);
+            suggestionsContainer.appendChild(suggestionItem);
+          });
+        }
+        
+        // Display duplicates section
+        if (hasDuplicates) {
+          const duplicatesSection = document.createElement('div');
+          duplicatesSection.style.marginTop = hasSuggestions ? '20px' : '0';
           
-          const icon = document.createElement('div');
-          icon.textContent = '⚠️';
-          icon.style.fontSize = '16px';
-          icon.style.paddingTop = '2px';
+          const sectionHeader = document.createElement('div');
+          sectionHeader.textContent = '🔗 Possible Duplicates';
+          sectionHeader.style.fontWeight = 'bold';
+          sectionHeader.style.color = '#3c4146';
+          sectionHeader.style.marginBottom = '10px';
+          sectionHeader.style.fontSize = '15px';
+          duplicatesSection.appendChild(sectionHeader);
           
-          const text = document.createElement('div');
-          text.textContent = suggestion;
-          text.style.color = '#3c4146';
-          text.style.fontSize = '14px';
+          // Process duplicates
+          analysis.duplicates.forEach(dup => {
+            const dupItem = createDuplicateItem(dup);
+            duplicatesSection.appendChild(dupItem);
+          });
           
-          suggestionItem.appendChild(icon);
-          suggestionItem.appendChild(text);
-          suggestionsContainer.appendChild(suggestionItem);
-        });
+          suggestionsContainer.appendChild(duplicatesSection);
+        }
+      }
+      
+      function createSuggestionItem(suggestion) {
+        const suggestionItem = document.createElement('div');
+        suggestionItem.style.padding = '12px';
+        suggestionItem.style.marginBottom = '10px';
+        suggestionItem.style.backgroundColor = '#f8f9f9';
+        suggestionItem.style.borderRadius = '6px';
+        suggestionItem.style.borderLeft = '4px solid #f48024';
+        suggestionItem.style.display = 'flex';
+        suggestionItem.style.gap = '10px';
+        
+        const icon = document.createElement('div');
+        icon.textContent = '⚠️';
+        icon.style.fontSize = '16px';
+        icon.style.paddingTop = '2px';
+        
+        const text = document.createElement('div');
+        text.textContent = suggestion;
+        text.style.color = '#3c4146';
+        text.style.fontSize = '14px';
+        
+        suggestionItem.appendChild(icon);
+        suggestionItem.appendChild(text);
+        return suggestionItem;
+      }
+      
+      function createDuplicateItem(dup) {
+        const dupItem = document.createElement('a');
+        dupItem.href = dup.link;
+        dupItem.target = '_blank';
+        dupItem.style.display = 'block';
+        dupItem.style.padding = '10px 12px';
+        dupItem.style.marginBottom = '8px';
+        dupItem.style.backgroundColor = '#eef7ff';
+        dupItem.style.borderRadius = '6px';
+        dupItem.style.border = '1px solid #d1e0f0';
+        dupItem.style.textDecoration = 'none';
+        dupItem.style.color = '#2c5777';
+        
+        // Create title with overflow handling
+        const title = document.createElement('div');
+        title.textContent = dup.title;
+        title.style.fontWeight = '500';
+        title.style.fontSize = '13px';
+        title.style.marginBottom = '5px';
+        title.style.overflow = 'hidden';
+        title.style.textOverflow = 'ellipsis';
+        title.style.display = '-webkit-box';
+        title.style.webkitLineClamp = '2';
+        title.style.webkitBoxOrient = 'vertical';
+        
+        // Create metadata row
+        const metaRow = document.createElement('div');
+        metaRow.style.display = 'flex';
+        metaRow.style.gap = '10px';
+        metaRow.style.fontSize = '12px';
+        metaRow.style.color = '#6a737c';
+        
+        const score = document.createElement('span');
+        score.textContent = `Score: ${dup.score}`;
+        
+        const answers = document.createElement('span');
+        answers.textContent = `Answers: ${dup.answer_count}`;
+        
+        const status = document.createElement('span');
+        status.textContent = dup.is_answered ? '✔ Answered' : '✘ Unanswered';
+        status.style.color = dup.is_answered ? '#45a163' : '#cf6a6a';
+        
+        metaRow.appendChild(score);
+        metaRow.appendChild(answers);
+        metaRow.appendChild(status);
+        
+        dupItem.appendChild(title);
+        dupItem.appendChild(metaRow);
+        return dupItem;
       }
       
       
       // Setup event listeners
       bodyField.addEventListener('input', handleInput);
+      titleField.addEventListener('input', handleInput);
 
       
     } else {
