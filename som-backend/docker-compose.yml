@@ -7,7 +7,7 @@ services:
     depends_on:
       - redis
     environment:
-      - REDIS_URL=redis://redis:6379
+      MY_SECRET: ${REDIS_API_URL}
 
   redis:
     image: "redis/redis-stack-server:latest"

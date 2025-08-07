@@ -1,4 +1,4 @@
-import natural from 'natural';
+import * as natural from 'natural';
 import { findDuplicates } from './stackoverflow';
 
   const classifier = new natural.BayesClassifier();
