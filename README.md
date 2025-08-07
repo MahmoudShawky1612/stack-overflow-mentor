@@ -1,214 +1,177 @@
-Stack Overflow Mentor - Chrome Extension
-https://img.shields.io/badge/License-MIT-yellow.svg
-https://img.shields.io/badge/TypeScript-4.0+-007ACC?logo=typescript
-https://img.shields.io/badge/Node.js-16%252B-339933?logo=node.js
-https://img.shields.io/badge/Redis-6%252B-DC382D?logo=redis
+# Stack Overflow Mentor - Chrome Extension
 
-https://github.com/yourusername/stack-overflow-mentor/raw/main/demo.gif
+![Demo](https://demo.gif)
 
-Your AI-powered assistant for crafting perfect Stack Overflow questions
+## Overview
 
-Table of Contents
-Overview
-
-Key Features
-
-How It Works
-
-Tech Stack
-
-Installation
-
-Configuration
-
-Usage
-
-Contributing
-
-License
-
-Acknowledgements
-
-Overview
 Stack Overflow Mentor is an intelligent Chrome extension that helps developers write better questions on Stack Overflow. By analyzing your question in real-time as you type, it provides actionable suggestions to improve clarity, add necessary details, and avoid common pitfalls. The extension also identifies potential duplicate questions, helping you find existing solutions faster and reduce duplicate content on Stack Overflow.
 
-Key Benefits:
-
-🚀 Increase question quality and response rate
-
-⚡ Reduce downvotes and question closures
-
-💡 Learn best practices for technical communication
-
-🔍 Discover solutions faster with duplicate detection
-
-Key Features
-Feature	Description	Benefit
-Real-time Analysis	NLP-powered suggestions as you type	Get instant feedback while writing
-Duplicate Detection	Finds similar questions before posting	Avoid duplicates, find solutions faster
-Quality Scoring	Dynamic quality score (0-100)	Track improvements in real-time
-Non-Intrusive UI	Sidebar that doesn't cover content	Focus on writing without distractions
-Contextual Suggestions	Specific recommendations based on content	Actionable improvements for your question
-Redis Caching	24-hour cache for API responses	Faster response times, reduced API calls
-How It Works
-Diagram
-Code
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-User starts typing a question on Stack Overflow
-
-Content script captures title and body content
-
-Background service sends data to Node.js backend
-
-Backend analyzes content using NLP and checks for duplicates
-
-Suggestions and duplicates are sent back to the extension
-
-Sidebar UI updates with real-time feedback
-
-Tech Stack
-Backend
-https://img.shields.io/badge/-Node.js-339933?logo=node.js&logoColor=white
-https://img.shields.io/badge/-Express-000000?logo=express&logoColor=white
-https://img.shields.io/badge/-TypeScript-3178C6?logo=typescript&logoColor=white
-https://img.shields.io/badge/-Redis-DC382D?logo=redis&logoColor=white
-https://img.shields.io/badge/-Natural-8D6748?logo=npm&logoColor=white
-
-Extension
-https://img.shields.io/badge/-Chrome_Extension-4285F4?logo=googlechrome&logoColor=white
-https://img.shields.io/badge/-HTML5-E34F26?logo=html5&logoColor=white
-https://img.shields.io/badge/-CSS3-1572B6?logo=css3&logoColor=white
-https://img.shields.io/badge/-JavaScript-F7DF1E?logo=javascript&logoColor=black
-
-APIs & Services
-https://img.shields.io/badge/-Stack_Overflow_API-FE7A16?logo=stackoverflow&logoColor=white
-https://img.shields.io/badge/-Redis_Cloud-DC382D?logo=redis&logoColor=white
-
-Installation
-Prerequisites
-Node.js v16+
-
-Redis instance (local or cloud)
-
-Chrome browser
-
-Stack Overflow API key
-
-Backend Setup
-bash
-# Clone the repository
-git clone https://github.com/yourusername/stack-overflow-mentor.git
-cd stack-overflow-mentor/som-backend
-
-# Install dependencies
-npm install
-
-# Set up environment variables
-cp .env.example .env
-Edit the .env file with your credentials:
-
-env
-REDIS_API_URL=your_redis_url
-STACKOVERFLOW_API_KEY=your_stackoverflow_api_key
-PORT=3000
-Start the backend:
-
-bash
-npm run build
-npm start
-Chrome Extension Setup
-Open Chrome and navigate to chrome://extensions
-
-Enable "Developer mode" (toggle in top-right corner)
-
-Click "Load unpacked"
-
-Select the extension directory from the project
-
-The Stack Overflow Mentor icon will appear in your toolbar
-
-Configuration
-Environment Variable	Description	Required	Default
-REDIS_API_URL	Redis connection URL	Yes	-
-STACKOVERFLOW_API_KEY	Stack Overflow API key	Yes	-
-PORT	Backend server port	No	3000
-Usage
-Navigate to Stack Overflow's "Ask Question" page
-
-Start typing your question:
-
-Title should be specific and concise
-
-Body should include details and code snippets
-
-The sidebar will automatically show:
-
-Quality score (0-100)
-
-Improvement suggestions
-
-Potential duplicate questions
-
-Click on duplicate links to view existing solutions
-
-Improve your question based on the feedback
-
-Pro Tip: The extension automatically hides when not needed and reappears when you start typing!
-
-Contributing
-We welcome contributions! Here's how to get started:
-
-Fork the repository
-
-Create a new branch: git checkout -b feature/your-feature
-
-Commit your changes: git commit -am 'Add some feature'
-
-Push to the branch: git push origin feature/your-feature
-
-Create a new Pull Request
-
-Areas for Contribution
-Improve NLP analysis accuracy
-
-Add support for other Stack Exchange sites
-
-Implement user settings/preferences
-
-Enhance UI/UX design
-
-Add more suggestion categories
-
-Implement automated testing
-
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-Acknowledgements
-Stack Overflow for their invaluable API and community
-
-Redis for providing an excellent caching solution
-
-Natural library developers for NLP capabilities
-
-Chrome Extension API documentation team
-
-All open-source contributors who made this project possible
-
-Transform your Stack Overflow experience - write better questions, get better answers!
-
+## Key Features
+
+- **Real-time Question Analysis**: Get instant feedback as you type your question
+- **AI-Powered Suggestions**: Natural Language Processing identifies vague language and missing elements
+- **Duplicate Detection**: Finds similar questions before you post
+- **Quality Scoring**: See your question's quality score improve as you make changes
+- **Non-Intrusive Interface**: Suggestions appear in a sidebar without blocking your content
+- **Performance Optimized**: Redis caching and throttled API calls ensure smooth performance
+
+## How It Works
+
+```
+User Types Question → NLP Analysis → Quality Assessment → Suggestions Generated
+                                ↓
+Stack Overflow API ← Duplicate Detection ← Redis Cache Check
+                                ↓
+                    Display Results in Sidebar
+```
+
+## Technologies Used
+
+### Backend
+- **Node.js**: JavaScript runtime environment
+- **Express**: Web application framework
+- **TypeScript**: Static typing for JavaScript
+- **Natural**: NLP library for text analysis
+- **Redis**: In-memory data store for caching
+- **Axios**: HTTP client for API requests
+- **Docker**: Containerization for deployment
+
+### Frontend (Extension)
+- **Chrome Extension API**: Browser extension functionality
+- **HTML/CSS**: UI components and styling
+- **TypeScript**: Content and background scripts
+
+### APIs
+- **Stack Overflow API**: For finding similar questions
+- **Redis Cloud**: Managed Redis service
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js v16+
+- Redis instance (local or cloud)
+- Chrome browser
+- Stack Overflow API key
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/stack-overflow-mentor.git
+   cd stack-overflow-mentor
+   ```
+
+2. **Install backend dependencies:**
+   ```bash
+   cd som-backend
+   npm install
+   ```
+
+3. **Set up environment variables:**
+   
+   Create a `.env` file in `som-backend`:
+   ```env
+   REDIS_API_URL=your_redis_url
+   STACKOVERFLOW_API_KEY=your_stackoverflow_api_key
+   PORT=3000
+   ```
+
+4. **Build and run the backend:**
+   ```bash
+   npm run build
+   npm start
+   ```
+
+5. **Load the Chrome extension:**
+   - Open Chrome and go to `chrome://extensions`
+   - Enable "Developer mode"
+   - Click "Load unpacked"
+   - Select the extension directory from the project
+
+## Configuration
+
+| Environment Variable | Description | Required |
+|---------------------|-------------|----------|
+| `REDIS_API_URL` | URL for your Redis instance | Yes |
+| `STACKOVERFLOW_API_KEY` | API key for Stack Overflow API | Yes |
+| `PORT` | Port for backend server (default: 3000) | No |
+
+## Usage
+
+1. Go to Stack Overflow's "Ask Question" page
+2. Start typing your question in the editor
+3. See real-time suggestions in the sidebar:
+   - Quality score of your question
+   - Specific suggestions for improvement
+   - Potential duplicate questions
+4. Click on duplicate links to view similar questions
+5. Improve your question based on the feedback
+
+## Features in Detail
+
+### Intelligent Suggestions
+- Identifies vague phrases like "it doesn't work"
+- Recommends adding code examples when missing
+- Suggests adding more details for short questions
+- Quality score updates in real-time
+
+### Duplicate Detection
+- Searches Stack Overflow for similar questions
+- Shows top 3 most relevant matches
+- Displays vote counts and answer status
+- Direct links to potential solutions
+
+### Performance Optimization
+- Redis caching for API responses (24-hour TTL)
+- Throttled requests (1 per second)
+- Efficient NLP processing
+- Dockerized deployment
+
+## System Architecture
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Chrome        │    │   Backend       │    │   Stack         │
+│   Extension     │◄──►│   Server        │◄──►│   Overflow API  │
+│                 │    │   (Node.js)     │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                              │
+                              ▼
+                       ┌─────────────────┐
+                       │   Redis Cache   │
+                       │                 │
+                       └─────────────────┘
+```
+
+## Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Create a new Pull Request
+
+### Areas for Contribution
+- Improve NLP analysis
+- Add more suggestion categories
+- Enhance UI/UX design
+- Implement user settings/preferences
+- Add support for other Stack Exchange sites
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+- Stack Overflow for their invaluable API
+- Redis for providing an excellent caching solution
+- Natural library developers for NLP capabilities
+- Chrome Extension API documentation team
+
+---
+
+**Transform your Stack Overflow experience - write better questions, get better answers!**
