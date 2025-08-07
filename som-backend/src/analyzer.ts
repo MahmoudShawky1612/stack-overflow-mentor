@@ -1,9 +1,7 @@
 import natural from 'natural';
 import { findDuplicates } from './stackoverflow';
 
-// Initialize NLP tools
-const tokenizer = new natural.WordTokenizer();
-const classifier = new natural.BayesClassifier();
+  const classifier = new natural.BayesClassifier();
 
 // Train classifier with examples
 classifier.addDocument('it doesn\'t work', 'vague');

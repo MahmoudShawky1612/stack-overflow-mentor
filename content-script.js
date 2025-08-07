@@ -12,83 +12,86 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
     if (bodyField) {
       console.log("Body element found:", bodyField);
       
-      // Create suggestion container
-      const suggestionContainer = document.createElement('div');
-      suggestionContainer.id = 'som-suggestion-container';
-      suggestionContainer.style.position = 'absolute';
-      suggestionContainer.style.bottom = '-10px';
-      suggestionContainer.style.right = '0';
-      suggestionContainer.style.left = '0';
-      suggestionContainer.style.zIndex = '1000';
-      suggestionContainer.style.backgroundColor = '#f8f9f9';
-      suggestionContainer.style.border = '1px solid #e4e6e8';
-      suggestionContainer.style.borderRadius = '4px';
-      suggestionContainer.style.opacity = '0';
-      suggestionContainer.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-      suggestionContainer.style.transform = 'translateY(10px)';
-      suggestionContainer.style.pointerEvents = 'auto';
-      suggestionContainer.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-      suggestionContainer.style.maxHeight = '300px';
-      suggestionContainer.style.overflowY = 'auto';
-      suggestionContainer.style.padding = '10px';
+      // Create suggestions sidebar container
+      const sidebar = document.createElement('div');
+      sidebar.id = 'som-suggestions-sidebar';
+      sidebar.style.position = 'fixed';
+      sidebar.style.right = '20px';
+      sidebar.style.top = '100px';
+      sidebar.style.width = '350px';
+      sidebar.style.backgroundColor = 'white';
+      sidebar.style.border = '1px solid #e4e6e8';
+      sidebar.style.borderRadius = '8px';
+      sidebar.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+      sidebar.style.zIndex = '10000';
+      sidebar.style.display = 'flex';
+      sidebar.style.flexDirection = 'column';
+      sidebar.style.maxHeight = 'calc(100vh - 150px)';
+      sidebar.style.overflow = 'hidden';
       
-      // Create suggestion header
+      // Create sidebar header
       const header = document.createElement('div');
+      header.style.backgroundColor = '#f48024';
+      header.style.color = 'white';
+      header.style.padding = '12px 16px';
       header.style.display = 'flex';
       header.style.justifyContent = 'space-between';
       header.style.alignItems = 'center';
-      header.style.marginBottom = '10px';
-      header.style.paddingBottom = '8px';
-      header.style.borderBottom = '1px solid #e4e6e8';
       
       const title = document.createElement('div');
-      title.style.display = 'flex';
-      title.style.alignItems = 'center';
-      title.style.gap = '8px';
+      title.textContent = '💡 Suggestions';
       title.style.fontWeight = 'bold';
-      title.style.color = '#535a60';
-      
-      const icon = document.createElement('span');
-      icon.textContent = '💡';
-      icon.style.fontSize = '16px';
-      
-      const titleText = document.createElement('span');
-      titleText.textContent = 'Suggestions';
-      titleText.id = 'som-suggestion-title';
-      
-      title.appendChild(icon);
-      title.appendChild(titleText);
+      title.style.fontSize = '16px';
       
       const qualityScore = document.createElement('div');
       qualityScore.id = 'som-quality-score';
-      qualityScore.style.background = '#f48024';
-      qualityScore.style.color = 'white';
-      qualityScore.style.padding = '4px 8px';
+      qualityScore.textContent = 'Quality: --/100';
+      qualityScore.style.backgroundColor = 'rgba(255,255,255,0.2)';
+      qualityScore.style.padding = '4px 10px';
       qualityScore.style.borderRadius = '12px';
-      qualityScore.style.fontSize = '12px';
-      qualityScore.style.fontWeight = 'bold';
+      qualityScore.style.fontSize = '14px';
       
       header.appendChild(title);
       header.appendChild(qualityScore);
+      sidebar.appendChild(header);
       
-      suggestionContainer.appendChild(header);
+      // Create suggestions container
+      const suggestionsContainer = document.createElement('div');
+      suggestionsContainer.id = 'som-suggestions-container';
+      suggestionsContainer.style.padding = '15px';
+      suggestionsContainer.style.flex = '1';
+      suggestionsContainer.style.overflowY = 'auto';
       
-      // Create suggestions list container
-      const suggestionsList = document.createElement('div');
-      suggestionsList.id = 'som-suggestions-list';
-      suggestionsList.style.display = 'flex';
-      suggestionsList.style.flexDirection = 'column';
-      suggestionsList.style.gap = '8px';
+      // Create initial message
+      const initialMessage = document.createElement('div');
+      initialMessage.textContent = 'Start typing to get suggestions...';
+      initialMessage.style.color = '#6a737c';
+      initialMessage.style.textAlign = 'center';
+      initialMessage.style.padding = '20px';
+      initialMessage.id = 'som-initial-message';
       
-      suggestionContainer.appendChild(suggestionsList);
+      suggestionsContainer.appendChild(initialMessage);
+      sidebar.appendChild(suggestionsContainer);
       
-      // Add to DOM
-      bodyField.parentNode.style.position = 'relative';
-      bodyField.parentNode.appendChild(suggestionContainer);
+      // Add to document
+      document.body.appendChild(sidebar);
+      
+      // Close button
+      const closeBtn = document.createElement('button');
+      closeBtn.textContent = '×';
+      closeBtn.style.position = 'absolute';
+      closeBtn.style.right = '10px';
+      closeBtn.style.top = '10px';
+      closeBtn.style.backgroundColor = 'transparent';
+      closeBtn.style.border = 'none';
+      closeBtn.style.color = 'white';
+      closeBtn.style.fontSize = '20px';
+      closeBtn.style.cursor = 'pointer';
+      closeBtn.onclick = () => sidebar.style.display = 'none';
+      header.appendChild(closeBtn);
       
       let currentAnalysis = null;
       let lastUpdateTime = 0;
-      let isFocused = false;
       
       // Debounced input handler
       const handleInput = () => {
@@ -102,48 +105,27 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
         };
         
         // Show loading state
-        showLoadingState();
+        suggestionsContainer.innerHTML = '';
+        const loading = document.createElement('div');
+        loading.textContent = 'Analyzing your question...';
+        loading.style.color = '#6a737c';
+        loading.style.textAlign = 'center';
+        loading.style.padding = '20px';
+        suggestionsContainer.appendChild(loading);
         
         chrome.runtime.sendMessage(
           { type: 'QUESTION_UPDATE', data: questionData },
           (response) => {
             console.log("Analysis received:", response);
             currentAnalysis = response;
-            updateSuggestionUI(response);
+            updateSuggestionsUI(response);
           }
         );
       };
       
-      // Show loading state
-      function showLoadingState() {
-        suggestionsList.innerHTML = '';
-        
-        const loadingItem = document.createElement('div');
-        loadingItem.style.display = 'flex';
-        loadingItem.style.alignItems = 'center';
-        loadingItem.style.padding = '8px';
-        loadingItem.style.gap = '8px';
-        loadingItem.style.background = '#f1f2f3';
-        loadingItem.style.borderRadius = '4px';
-        
-        const loadingIcon = document.createElement('div');
-        loadingIcon.textContent = '⏳';
-        
-        const loadingText = document.createElement('div');
-        loadingText.textContent = 'Analyzing your question...';
-        loadingText.style.color = '#6a737c';
-        
-        loadingItem.appendChild(loadingIcon);
-        loadingItem.appendChild(loadingText);
-        
-        suggestionsList.appendChild(loadingItem);
-        suggestionContainer.style.opacity = '1';
-        suggestionContainer.style.transform = 'translateY(0)';
-      }
-      
-      // Update the UI based on analysis
-      function updateSuggestionUI(analysis) {
-        suggestionsList.innerHTML = '';
+      // Update the UI with all suggestions
+      function updateSuggestionsUI(analysis) {
+        suggestionsContainer.innerHTML = '';
         
         // Update quality score
         if (analysis.qualityScore !== undefined) {
@@ -152,124 +134,43 @@ if (window.location.href.includes('stackoverflow.com/questions/')) {
         
         if (!analysis.suggestions || analysis.suggestions.length === 0) {
           const noSuggestions = document.createElement('div');
-          noSuggestions.style.display = 'flex';
-          noSuggestions.style.alignItems = 'center';
-          noSuggestions.style.padding = '8px';
-          noSuggestions.style.gap = '8px';
-          noSuggestions.style.background = '#e6f4ea';
-          noSuggestions.style.borderRadius = '4px';
-          noSuggestions.style.borderLeft = '3px solid #5fba7d';
-          
-          const icon = document.createElement('div');
-          icon.textContent = '✅';
-          
-          const text = document.createElement('div');
-          text.textContent = "Your question looks great! Keep writing...";
-          text.style.color = '#535a60';
-          
-          noSuggestions.appendChild(icon);
-          noSuggestions.appendChild(text);
-          
-          suggestionsList.appendChild(noSuggestions);
-          
-          // Auto-hide after 3 seconds
-          setTimeout(() => {
-            if (!isFocused) {
-              suggestionContainer.style.opacity = '0';
-              suggestionContainer.style.transform = 'translateY(10px)';
-            }
-          }, 3000);
+          noSuggestions.textContent = '✅ Your question looks great! Keep writing...';
+          noSuggestions.style.color = '#3c4146';
+          noSuggestions.style.textAlign = 'center';
+          noSuggestions.style.padding = '20px';
+          suggestionsContainer.appendChild(noSuggestions);
           return;
         }
         
         // Create suggestion items
         analysis.suggestions.forEach(suggestion => {
           const suggestionItem = document.createElement('div');
+          suggestionItem.style.padding = '12px';
+          suggestionItem.style.marginBottom = '10px';
+          suggestionItem.style.backgroundColor = '#f8f9f9';
+          suggestionItem.style.borderRadius = '6px';
+          suggestionItem.style.borderLeft = '4px solid #f48024';
           suggestionItem.style.display = 'flex';
-          suggestionItem.style.alignItems = 'flex-start';
-          suggestionItem.style.padding = '8px';
-          suggestionItem.style.gap = '8px';
-          suggestionItem.style.background = '#fff';
-          suggestionItem.style.borderRadius = '4px';
-          suggestionItem.style.borderLeft = '3px solid #f48024';
-          suggestionItem.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
+          suggestionItem.style.gap = '10px';
           
           const icon = document.createElement('div');
           icon.textContent = '⚠️';
-          icon.style.fontSize = '14px';
+          icon.style.fontSize = '16px';
           icon.style.paddingTop = '2px';
           
           const text = document.createElement('div');
           text.textContent = suggestion;
           text.style.color = '#3c4146';
-          text.style.fontSize = '13px';
-          text.style.lineHeight = '1.4';
-          text.style.flex = '1';
+          text.style.fontSize = '14px';
           
           suggestionItem.appendChild(icon);
           suggestionItem.appendChild(text);
-          
-          suggestionsList.appendChild(suggestionItem);
+          suggestionsContainer.appendChild(suggestionItem);
         });
-        
-        suggestionContainer.style.opacity = '1';
-        suggestionContainer.style.transform = 'translateY(0)';
       }
       
       // Setup event listeners
       bodyField.addEventListener('input', handleInput);
-      
-      // Show when field is focused
-      bodyField.addEventListener('focus', () => {
-        isFocused = true;
-        if (currentAnalysis) {
-          suggestionContainer.style.opacity = '1';
-          suggestionContainer.style.transform = 'translateY(0)';
-        } else {
-          showPlaceholder();
-        }
-      });
-      
-      // Hide when field is blurred
-      bodyField.addEventListener('blur', () => {
-        isFocused = false;
-        setTimeout(() => {
-          if (!isFocused) {
-            suggestionContainer.style.opacity = '0';
-            suggestionContainer.style.transform = 'translateY(10px)';
-          }
-        }, 200);
-      });
-      
-      // Show placeholder message
-      function showPlaceholder() {
-        suggestionsList.innerHTML = '';
-        
-        const placeholder = document.createElement('div');
-        placeholder.style.display = 'flex';
-        placeholder.style.alignItems = 'center';
-        placeholder.style.padding = '8px';
-        placeholder.style.gap = '8px';
-        placeholder.style.background = '#f1f2f3';
-        placeholder.style.borderRadius = '4px';
-        
-        const icon = document.createElement('div');
-        icon.textContent = '💡';
-        
-        const text = document.createElement('div');
-        text.textContent = 'Start typing to get suggestions...';
-        text.style.color = '#6a737c';
-        
-        placeholder.appendChild(icon);
-        placeholder.appendChild(text);
-        
-        suggestionsList.appendChild(placeholder);
-        suggestionContainer.style.opacity = '1';
-        suggestionContainer.style.transform = 'translateY(0)';
-      }
-      
-      // Initial display
-      showPlaceholder();
       
     } else {
       console.error("Body field not found");
