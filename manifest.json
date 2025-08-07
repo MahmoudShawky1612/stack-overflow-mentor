@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Stack Overflow Mentor",
+  "version": "1.0",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["*://*.stackoverflow.com/*"],
+  "content_scripts": [{
+    "matches": ["*://*.stackoverflow.com/*"],
+    "js": ["content-script.js"]
+  }],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
