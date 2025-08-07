@@ -21,6 +21,14 @@ const bodyField = document.querySelector('.wmd-input, .js-editor');
           body: bodyField.textContent
         };
         console.log("Question data:", questionData);
+        chrome.runtime.sendMessage(
+  { type: 'QUESTION_UPDATE', data: questionData },
+  (response) => {
+    console.log("Received analysis:", response);
+    // TODO: Display suggestions to user
+    alert(`Suggestion: ${response.suggestions[0]}`);
+  }
+);
       };
 
       titleField.addEventListener('input', handleInput);
