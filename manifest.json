@@ -16,18 +16,6 @@
     "js": ["content-script.js"]
   }],
   "action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "16": "icon/icon.png",
-      "32": "icon/icon.png",
-      "48": "icon/icon.png",
-      "128": "icon/icon.png"
-    }
-  },
-  "icons": {
-    "16": "icon/icon.png",
-    "32": "icon/icon.png",
-    "48": "icon/icon.png",
-    "128": "icon/icon.png"
-  }
+    "default_popup": "popup.html" 
+  } 
 }
